@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tu Rosa Virtual</title>
+  <!-- Usa el CSS adaptado, reemplaza la ruta si quieres -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body id="body">
+  <div id="contenedor">
+  <div class="loading">
+    <div class="p-24" style="padding-top: 46vh;">
+      <h1 class="h1-rosify" style="font-size: 30px; font-weight: 600; text-align: center; color: #000;">
+        <span id="text-0-1"></span>
+        <span id="text-0-2" class="color-rose"></span>
+      </h1>
+    </div>
+  </div>
+
+<div id="gift-page" class="gift-page" style="display:none;">
+  <div class="gift-section" id="gift-rosa">
+    <div id="rosa-animada" class="rosa-animada" style="display: none;">
+      <div id="rosa-bg" class="rosa-bg"></div>
+      <img id="img-rosa" src="" alt="Rosa" class="rosa-img" />
+    </div>
+  </div>
+  <div class="gift-section" id="gift-mensaje">
+    <div id="mensaje-corto" class="mensaje-corto"></div>
+  </div>
+  <div class="gift-section" id="gift-boton">
+    <div id="boton-abrir" class="boton-abrir" style="display: none;">
+      Abrir mensaje
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+
+    <script>
+      let Confetti = function () {
+        var t = function () {
+            return function () {
+                this.gravity = 10, this.particle_count = 105, this.particle_size = 1, this.explosion_power = 25, this.destroy_target = !0, this.fade = !1
+            }
+        }(), e = function () {
+            function e(n) {
+                var r = this;
+                if (this.bursts = [], this.setCount = function (t) {
+                    if ("number" != typeof t) throw new Error("Input must be of type 'number'");
+                    e.CONFIG.particle_count = t
+                }, this.setPower = function (t) {
+                    if ("number" != typeof t) throw new Error("Input must be of type 'number'");
+                    e.CONFIG.explosion_power = t
+                }, this.setSize = function (t) {
+                    if ("number" != typeof t) throw new Error("Input must be of type 'number'");
+                    e.CONFIG.particle_size = t
+                }, this.setFade = function (t) {
+                    if ("boolean" != typeof t) throw new Error("Input must be of type 'boolean'");
+                    e.CONFIG.fade = t
+                }, this.destroyTarget = function (t) {
+                    if ("boolean" != typeof t) throw new Error("Input must be of type 'boolean'");
+                    e.CONFIG.destroy_target = t
+                }, this.setupCanvasContext = function () {
+                    if (!e.CTX) {
+                        var t = document.createElement("canvas");
+                        e.CTX = t.getContext("2d"), t.width = 2 * window.innerWidth, t.height = 2 * window.innerHeight, t.style.position = "fixed", t.style.top = "0", t.style.left = "0", t.style.width = "calc(100%)", t.style.height = "calc(100%)", t.style.margin = "0", t.style.padding = "0", t.style.zIndex = "999999999", t.style.pointerEvents = "none", document.body.appendChild(t), window.addEventListener("resize", function () {
+                            t.width = 2 * window.innerWidth, t.height = 2 * window.innerHeight
+                        })
+                    }
+                }, this.setupElement = function (t) {
+                    var n;
+                    r.element = document.getElementById(t), null === (n = r.element) || void 0 === n || n.addEventListener("click", function (t) {
+                        var n = new o(2 * t.clientX, 2 * t.clientY);
+                        r.bursts.push(new i(n)), e.CONFIG.destroy_target && (r.element.style.visibility = "hidden")
+                    })
+                }, this.update = function (t) {
+                    r.delta_time = (t - r.time) / 1e3, r.time = t;
+                    for (var e = r.bursts.length - 1; e >= 0; e--) r.bursts[e].update(r.delta_time), 0 == r.bursts[e].particles.length && r.bursts.splice(e, 1);
+                    r.draw(), window.requestAnimationFrame(r.update)
+                }, !n) throw new Error("Missing id");
+                e.CONFIG || (e.CONFIG = new t), this.time = (new Date).getTime(), this.delta_time = 0, this.setupCanvasContext(), this.setupElement(n), window.requestAnimationFrame(this.update)
+            }
+
+            return e.prototype.draw = function () {
+                s.clearScreen();
+                for (var t = 0, e = this.bursts; t < e.length; t++) {
+                    e[t].draw()
+                }
+            }, e
+        }(), i = function () {
+            function t(t) {
+                this.particles = [];
+                for (var i = 0; i < e.CONFIG.particle_count; i++) this.particles.push(new n(t))
+            }
+
+            return t.prototype.update = function (t) {
+                for (var e = this.particles.length - 1; e >= 0; e--) this.particles[e].update(t), this.particles[e].checkBounds() && this.particles.splice(e, 1)
+            }, t.prototype.draw = function () {
+                for (var t = this.particles.length - 1; t >= 0; t--) this.particles[t].draw()
+            }, t
+        }(), n = function () {
+            function t(t) {
+                this.size = new o((16 * Math.random() + 4) * e.CONFIG.particle_size, (4 * Math.random() + 4) * e.CONFIG.particle_size), this.position = new o(t.x - this.size.x / 2, t.y - this.size.y / 2), this.velocity = r.generateVelocity(), this.rotation = 360 * Math.random(), this.rotation_speed = 10 * (Math.random() - .5), this.hue = 360 * Math.random(), this.opacity = 100, this.lifetime = Math.random() + .25
+            }
+
+            return t.prototype.update = function (t) {
+                this.velocity.y += e.CONFIG.gravity * (this.size.y / (10 * e.CONFIG.particle_size)) * t, this.velocity.x += 25 * (Math.random() - .5) * t, this.velocity.y *= .98, this.velocity.x *= .98, this.position.x += this.velocity.x, this.position.y += this.velocity.y, this.rotation += this.rotation_speed, e.CONFIG.fade && (this.opacity -= this.lifetime)
+            }, t.prototype.checkBounds = function () {
+                return this.position.y - 2 * this.size.x > 2 * window.innerHeight
+            }, t.prototype.draw = function () {
+                s.drawRectangle(this.position, this.size, this.rotation, this.hue, this.opacity)
+            }, t
+        }(), o = function () {
+            return function (t, e) {
+                this.x = t || 0, this.y = e || 0
+            }
+        }(), r = function () {
+            function t() {
+            }
+
+            return t.generateVelocity = function () {
+                var t = Math.random() - .5, i = Math.random() - .7, n = Math.sqrt(t * t + i * i);
+                return i /= n, new o((t /= n) * (Math.random() * e.CONFIG.explosion_power), i * (Math.random() * e.CONFIG.explosion_power))
+            }, t
+        }(), s = function () {
+            function t() {
+            }
+
+            return t.clearScreen = function () {
+                e.CTX && e.CTX.clearRect(0, 0, 2 * window.innerWidth, 2 * window.innerHeight)
+            }, t.drawRectangle = function (t, i, n, o, r) {
+                e.CTX && (e.CTX.save(), e.CTX.beginPath(), e.CTX.translate(t.x + i.x / 2, t.y + i.y / 2), e.CTX.rotate(n * Math.PI / 180), e.CTX.rect(-i.x / 2, -i.y / 2, i.x, i.y), e.CTX.fillStyle = "hsla(" + o + "deg, 90%, 65%, " + r + "%)", e.CTX.fill(), e.CTX.restore())
+            }, t
+        }();
+        return e
+    }();
+
+   
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const contenedor = document.getElementById("contenedor");
+  // 1) Leer el parámetro "code" de la URL
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  if (!code) {
+    contenedor.innerHTML = "<p>Código inválido 😞</p>";
+    return;
+  }
+
+  try {
+    // 2) Hacer GET a /api/rosas/:code
+    const res = await fetch(`/api/rosas/${code}`);
+    const data = await res.json();
+
+    if (!data.success) {
+      contenedor.innerHTML = "<p>Rosa no encontrada 😢</p>";
+      return;
+    }
+
+    // 3) Tus variables principales
+    const { color, mensaje, remitente, intencion, imagen, video } = data.data;
+
+    // 4) Paletas de color
+    const colorMap = {
+      red: '#e23535',
+      orange: '#ff9c24',
+      violet: '#6e16e3',
+      yellow: '#fddd00',
+      blue: '#2d95ff',
+      white: '#dcdcdc',
+      pink: '#ff58ac'
+    };
+    const colorBgMap = {
+      red: "#ffdada",
+      orange: "#ffe3c1",
+      violet: "#e7e4ff",
+      yellow: "#fcf7d1",
+      blue: "#d3ebff",
+      white: "#e8e8e8",
+      pink: "#ffe5f2"
+    };
+    const colorHex = colorMap[color] || color || "#ff9c24";
+    const colorBgRosa = colorBgMap[color] || "#e1e1e1";
+
+    // --- Pantalla de carga animada ---
+    document.querySelector('#text-0-2').style.color = colorHex;
+
+    let o1 = 0, o2 = 0;
+    const txt1 = "Para";
+    const txt2 = remitente;
+    const speed = 150;
+
+function typeWriter() {
+  if (o1 < txt1.length) {
+    document.getElementById("text-0-1").innerHTML += txt1.charAt(o1);
+    o1++;
+    setTimeout(typeWriter, speed);
+  } else if (o2 < txt2.length) {
+    document.getElementById("text-0-2").innerHTML += txt2.charAt(o2);
+    o2++;
+    setTimeout(typeWriter, speed);
+  } else {
+    // --- Fade out ---
+    setTimeout(() => {
+      document.querySelector('.loading').classList.add('fadeout');
+      // Espera a que termine la transición de opacidad (0.9s aprox)
+      setTimeout(() => {
+        // Ahora sí, oculta el loading, muestra el grid y arranca la animación
+        document.querySelector('.loading').style.display = "none";
+        document.getElementById('gift-page').style.display = "grid";
+        mostrarRosaAnimada();
+      }, 900); // Espera a que termine la transición (0.9s)
+    }, 500); // Pausa breve antes de empezar a desvanecer
+  }
+}
+
+    // Pausa antes de empezar a escribir
+    setTimeout(() => {
+      typeWriter();
+    }, 1000); // Espera 1 segundo antes de empezar la animación
+
+
+    // --- Animación de la rosa ---
+    function mostrarRosaAnimada() {
+      const rosaAnimada = document.getElementById("rosa-animada");
+      const rosaBg = document.getElementById("rosa-bg");
+      const imgRosa = document.getElementById("img-rosa");
+
+      imgRosa.src = imagen;
+      rosaBg.style.background = colorBgRosa;
+      rosaAnimada.style.display = "flex";
+
+      // Paso 1: Fondo aparece (fade in)
+      setTimeout(() => {
+        rosaAnimada.classList.add("mostrar");
+
+        // Paso 2: 1.3 seg después, aparece la rosa con pop
+        setTimeout(() => {
+          rosaAnimada.classList.add("imgshow");
+
+          // Paso 3: 0.7s después, ambos se achican y suben arriba
+          setTimeout(() => {
+            rosaAnimada.classList.add("final");
+
+            // Paso 4: Espera 2 segundos, luego inicia levitación con JS
+            setTimeout(() => {
+              let t = 0;
+              let amplitud = 8;   // ← Cambia para más/menos levita
+              let velocidad = 2.3; // segundos por ciclo
+
+              rosaAnimada.__levitacionInterval = setInterval(() => {
+                t += (Math.PI * 2) / (60 * velocidad);
+                const y = Math.sin(t) * amplitud;
+                rosaAnimada.style.transform = `translate(-50%, ${y}px)`;
+              }, 1000 / 60);
+
+              // --- Aquí va el mensaje corto typewriter PRO ---
+              mostrarMensajeCortoHTML(remitente, intencion, colorHex);
+
+            }, 2000); // 2 segundos después de estar arriba
+
+          }, 700); // Tiempo para achique y subida (ajusta si quieres más lento)
+        }, 1300); // Tiempo para mostrar la rosa después del fondo
+      }, 200); // Fade in inicial
+    }
+
+    // --- Typewriter que respeta HTML para nombre en color ---
+function mostrarMensajeCortoHTML(nombre, intencion, colorHex) {
+  const mensajeCortoDiv = document.getElementById("mensaje-corto");
+  mensajeCortoDiv.innerHTML = "";
+
+  // Arma el mensaje con nombre en color, y el espacio no rompible
+  const mensajeHtml = `<span style="color:${colorHex}; font-weight:900">${nombre}</span>, ${intencion}`;
+
+  let i = 0, actual = "", abriendoTag = false, tag = "";
+  const speed = 44;
+
+  function escribir() {
+    if (i < mensajeHtml.length) {
+      const char = mensajeHtml.charAt(i);
+
+      if (char === "<") abriendoTag = true;
+      if (abriendoTag) {
+        tag += char;
+        if (char === ">") {
+          abriendoTag = false;
+          actual += tag;
+          tag = "";
+        }
+      } else {
+        actual += char;
+      }
+      mensajeCortoDiv.innerHTML = actual;
+      i++;
+      setTimeout(escribir, speed);
+    } else {
+    setTimeout(() => {
+      const btn = document.getElementById("boton-abrir");
+      btn.style.display = "flex";
+      btn.style.background = colorHex;
+
+      // Solo aquí, cuando el botón YA existe:
+      if (!window.confetti) {
+        window.confetti = new Confetti('boton-abrir');
+        window.confetti.setCount(525);
+        window.confetti.setSize(2);
+        window.confetti.setPower(40);
+        window.confetti.setFade(false);
+        window.confetti.destroyTarget(false);
+      }
+    }, 350);
+}
+
+  }
+  escribir();
+}
+
+
+
+
+  } catch (err) {
+    console.error(err);
+    contenedor.innerHTML = "<p>Error al cargar la rosa 😕</p>";
+  }
+
+
+
+
+
+  
+});
+
+
+  </script>
+</body>
+</html>

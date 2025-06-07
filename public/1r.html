@@ -1,0 +1,69 @@
+<!-- public/r.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tu Rosa Virtual</title>
+  <link rel="stylesheet" href="styles/style_pag1.css" />
+</head>
+<body>
+  <div id="contenedor">
+    <p>Cargando rosa…</p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const contenedor = document.getElementById("contenedor");
+      // 1) Leer el parámetro "code" de la URL
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      if (!code) {
+        contenedor.innerHTML = "<p>Código inválido 😞</p>";
+        return;
+      }
+
+      try {
+        // 2) Hacer GET a /api/rosas/:code
+        const res = await fetch(`/api/rosas/${code}`);
+        const data = await res.json();
+
+        if (!data.success) {
+          contenedor.innerHTML = "<p>Rosa no encontrada 😢</p>";
+          return;
+        }
+
+        const { color, mensaje, remitente, intencion, imagen, video } = data.data;
+
+        // 3) Renderizar la rosa con estilos básicos
+        contenedor.innerHTML = `
+          <div style="
+              text-align: center; 
+              max-width: 500px; 
+              margin: 2rem auto; 
+              padding: 2rem; 
+              border: 1px solid #ddd; 
+              border-radius: 8px;
+              box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          ">
+            <img 
+              src="${imagen}" 
+              alt="Rosa de color ${color}" 
+              style="width: 200px; height: auto; margin-bottom: 1rem;"
+            />
+            <h2 style="color: ${color}; margin-bottom: 0.5rem;">${mensaje}</h2>
+            <em style="display: block; margin-bottom: 1rem; color: #555;">${intencion}</em>
+            <p style="color: #333;">— de ${remitente}</p>
+            ${video 
+              ? `<p><a href="${video}" target="_blank">Ver video adjunto</a></p>` 
+              : ""}
+          </div>
+        `;
+      } catch (err) {
+        console.error(err);
+        contenedor.innerHTML = "<p>Error al cargar la rosa 😕</p>";
+      }
+    });
+  </script>
+</body>
+</html>

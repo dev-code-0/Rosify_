@@ -1,0 +1,194 @@
+body {
+  background: #fafafa;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #212730;
+  min-height: 100vh;
+  /* Para evitar barras laterales molestas */
+  width: 100vw;
+  overflow-x: hidden;
+  display: grid;
+  place-items: center; /* Centra vertical y horizontal */
+}
+
+#contenedor {
+  width: 90vw;
+  max-width: 450px;
+  min-height: 100vh; /* Ocupa todo el alto si hay poco contenido */
+  background: transparent; /* o blanco si quieres caja */
+  margin: 0 auto;
+  display: grid;
+  position: relative;
+  box-sizing: border-box;
+  /* Si quieres una sombra sutil, puedes agregar: */
+  /* box-shadow: 0 2px 8px 0 #0002; */
+}
+#rosa-animada {
+  justify-self: center;
+  align-self: end;
+}
+.gift-page {
+  display: grid;
+  grid-template-rows: 350px 1fr 140px;
+  width: 100%;
+  max-width: 450px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: transparent;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.gift-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#gift-rosa {
+  /* Para forzar la rosa al centro superior */
+  align-items: center;
+  justify-content: flex-end;
+}
+#gift-mensaje {
+  display: flex;
+  align-items: center;      /* Centra vertical */
+  justify-content: center;  /* Centra horizontal */
+}
+
+#gift-boton {
+  align-items: center;
+  justify-content: flex-start;
+}
+.rosa-animada {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 1; /* <- SIEMPRE visible el bloque contenedor */
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: opacity 0.9s, top 1.8s cubic-bezier(.33,1.34,.58,1), transform 1.8s cubic-bezier(.33,1.34,.58,1);
+}
+.rosa-bg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 750px;
+  height: 750px;
+  border-radius: 50%;
+  background: #ffe3c1;
+  z-index: 1;
+  opacity: 0; /* inicia invisible */
+  transform: translate(-50%, -50%) scale(1.35);
+  transition:
+    width 1.8s cubic-bezier(.33,1.34,.58,1),
+    height 1.8s cubic-bezier(.33,1.34,.58,1),
+    opacity 1.3s,
+    background 0.8s,
+    transform 1.8s cubic-bezier(.33,1.34,.58,1);
+}
+.rosa-img {
+  position: relative;
+  z-index: 2;
+  width: 350px;
+  height: 350px;
+  object-fit: contain;
+  opacity: 0; /* inicia invisible */
+  transform: scale(0.92);
+  transition:
+    width 1.8s cubic-bezier(.33,1.34,.58,1),
+    height 1.8s cubic-bezier(.33,1.34,.58,1),
+    opacity 0.7s,
+    transform 1.8s cubic-bezier(.33,1.34,.58,1);
+}
+
+/* El bloque debe estar visible desde el JS con display: flex y opacity: 1 */
+.rosa-animada.mostrar .rosa-bg {
+  opacity: 1;
+}
+
+.rosa-animada.imgshow .rosa-img {
+  opacity: 1;
+  transform: scale(2);
+  -webkit-transform: scale(2);
+  -moz-transform: scale(2);
+  -ms-transform: scale(2);
+  -o-transform: scale(2);
+}
+
+.rosa-animada.final {
+  top: 48px;
+  transform: translate(-50%, 0);
+  height: 350px;
+}
+.rosa-animada.final .rosa-bg {
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.rosa-animada.final .rosa-img {
+  width: 300px;
+  height: 300px;
+  transform: scale(1);
+  opacity: 1;
+  
+}
+
+.fadeout {
+  transition: opacity 0.8s;
+  opacity: 0;
+}
+
+.mensaje-corto {
+  display: block;
+  margin: 0 auto;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #212730;
+  text-align: center;
+  line-height: 1.38;
+  letter-spacing: 0.2px;
+  width: 90%;
+  max-width: 370px;
+  min-height: 44px;
+  word-break: break-word;
+  white-space: normal;
+}
+.mensaje-corto span {
+  font-weight: 700;
+  display: inline; /* <- Así el nombre nunca se va a una línea aparte */
+}
+
+
+.boton-abrir {
+  margin: 0;
+  width: 210px;
+  height: 56px;
+  background: #ff9c24;
+  color: #fff;
+  border-radius: 18px;
+  font-size: 1.14rem;
+  font-weight: 700;
+  box-shadow: 0 3px 18px 0 #0001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  letter-spacing: 0.7px;
+  transition: background 0.18s, transform 0.15s;
+}
+
+
+.boton-abrir:hover, .boton-abrir:active {
+  background: #ffaa48;
+  transform: scale(1.05);
+}
+
