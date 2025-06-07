@@ -1,3 +1,4 @@
+
 body {
   background: #fafafa;
   margin: 0;
@@ -29,7 +30,7 @@ body {
 }
 .gift-page {
   display: grid;
-  grid-template-rows: 350px 1fr 140px;
+  grid-template-rows: minmax(30vh, 350px) 1fr minmax(10vh, 140px);
   width: 100%;
   max-width: 450px;
   min-height: 100vh;
@@ -96,8 +97,9 @@ body {
 .rosa-img {
   position: relative;
   z-index: 2;
-  width: 350px;
-  height: 350px;
+  width: 80%;
+  max-width: 350px;
+  height: auto;
   object-fit: contain;
   opacity: 0; /* inicia invisible */
   transform: scale(0.92);
@@ -128,14 +130,14 @@ body {
   height: 350px;
 }
 .rosa-animada.final .rosa-bg {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
 }
 .rosa-animada.final .rosa-img {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   transform: scale(1);
   opacity: 1;
   
@@ -149,7 +151,7 @@ body {
 .mensaje-corto {
   display: block;
   margin: 0 auto;
-  font-size: 1.7rem;
+  font-size: clamp(1.4rem, 4vw, 1.7rem);
   font-weight: 900;
   color: #212730;
   text-align: center;
@@ -191,4 +193,185 @@ body {
   background: #ffaa48;
   transform: scale(1.05);
 }
+/* Moved from inline styles in r.html */
+.p-24 {
+  padding-top: 46vh;
+}
 
+.h1-rosify {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  color: #000;
+}
+
+#gift-page {
+  display: none;
+}
+
+#rosa-animada {
+  display: none;
+}
+
+#boton-abrir {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .rosa-bg {
+    width: 95vw;
+    height: 95vw;
+  }
+  .rosa-img {
+    width: 45vw;
+    height: 45vw;
+  }
+  .gift-page {
+    grid-template-rows: 250px 1fr 110px;
+  }
+}
+
+
+
+
+/* Agrega estas animaciones a tu CSS si no las tienes aún */
+.rosa-animada .rosa-img.rosa-popout {
+  transition:
+    transform 0.68s cubic-bezier(.33,1.34,.58,1),
+    opacity 0.53s cubic-bezier(.33,1.34,.58,1);
+  transform: scale(2.4);
+  opacity: 0;
+}
+.rosa-animada .rosa-bg.bg-popout {
+  transition:
+    transform 1s cubic-bezier(.33,1.34,.58,1),
+    width 1s cubic-bezier(.33,1.34,.58,1),
+    height 1s cubic-bezier(.33,1.34,.58,1),
+    opacity 0.53s cubic-bezier(.33,1.34,.58,1);
+  transform: translate(-50%, -50%) scale(2.2);
+  width: 800px !important;
+  height: 800px !important;
+  opacity: 0;   /* <-- Sigue visible al agrandar */
+  z-index: 0;
+}
+
+.fadeout-gift {
+  transition: opacity 0.5s cubic-bezier(.33,1.34,.58,1);
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+
+
+.carta-page {
+  display: grid;
+  grid-template-rows: 350px 1fr 120px;
+  width: 100%;
+  max-width: 450px;
+  min-height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  background: transparent;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.6s;
+  z-index: 1;
+}
+.carta-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+#carta-img-section {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#carta-mensaje-section {
+  align-items: center;
+  justify-content: center;
+}
+
+#carta-boton-section {
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.carta-img {
+  width: 260px;
+  height: auto;
+  max-width: 92vw;
+  margin-top: 32px;
+  margin-bottom: 10px;
+  border-radius: 28px;
+  box-shadow: 0 2px 22px 0 #0001;
+  background: #e9e9e9;
+  z-index: 2;
+  opacity: 0;  /* Empieza invisible */
+  transform: scale(0.94); /* Pequeño toque */
+  transition:
+    opacity 0.9s cubic-bezier(.33,1.34,.58,1),
+    transform 0.9s cubic-bezier(.33,1.34,.58,1);
+}
+.carta-img.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Fondo pastel animado, igual que antes */
+.carta-bg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: #f0c9dc; /* O el color que toque según la rosa */
+  z-index: 0;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.5);
+  transition: opacity 1.2s cubic-bezier(.33,1.34,.58,1);
+}
+.carta-bg.carta-bg-visible {
+  opacity: 1;
+}
+
+
+/* Animación cuando aparece la carta */
+.carta-bg.carta-bg-popout {
+  width: 800px !important;
+  height: 800px !important;
+  transform: translate(-50%, -50%) scale(2.2);
+  opacity: 1 !important;
+}
+
+
+.carta-mensaje {
+  margin-top: 5px;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #212730;
+  text-align: center;
+  line-height: 1.39;
+  letter-spacing: 0.15px;
+  max-width: 370px;
+  min-height: 44px;
+  word-break: break-word;
+  white-space: normal;
+  padding: 0 12px;
+}
+.carta-mensaje span {
+  font-weight: 900;
+  /* El color se pone en línea con el JS */
+}
+
+@media (max-width: 400px) {
+  .boton-abrir { width: 90%; }
+  .gift-page { grid-template-rows: 25vh 1fr 15vh; }
+  /* Ajusta tamaños de letra, márgenes, etc. */
+}
+@media (min-width: 768px) {
+  #contenedor { max-width: 600px; }
+}

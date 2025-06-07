@@ -13,18 +13,18 @@
 <body id="body">
   <div id="contenedor">
   <div class="loading">
-    <div class="p-24" style="padding-top: 46vh;">
-      <h1 class="h1-rosify" style="font-size: 30px; font-weight: 600; text-align: center; color: #000;">
+    <div class="p-24">
+      <h1 class="h1-rosify">
         <span id="text-0-1"></span>
         <span id="text-0-2" class="color-rose"></span>
       </h1>
     </div>
   </div>
 
-<div id="gift-page" class="gift-page" style="display:none;">
+<div id="gift-page" class="gift-page">
   <div class="gift-section" id="gift-rosa">
-    <div id="rosa-animada" class="rosa-animada" style="display: none;">
-      <div id="rosa-bg" class="rosa-bg"></div>
+    <div id="rosa-animada" class="rosa-animada">
+      <div id="rosa-bg" class="rosa-bg bg-desaparecer"></div>
       <img id="img-rosa" src="" alt="Rosa" class="rosa-img" />
     </div>
   </div>
@@ -32,13 +32,28 @@
     <div id="mensaje-corto" class="mensaje-corto"></div>
   </div>
   <div class="gift-section" id="gift-boton">
-    <div id="boton-abrir" class="boton-abrir" style="display: none;">
+    <div id="boton-abrir" class="boton-abrir">
       Abrir mensaje
     </div>
   </div>
 </div>
 
 
+<!-- Segundo grid: la carta animada (oculto al inicio) -->
+<div id="carta-page" class="carta-page" style="display: none;">
+  <!-- Sección 1: Imagen de la carta -->
+  <div class="carta-section" id="carta-img-section">
+    <img id="img-carta" class="carta-img" src="" alt="Carta" />
+  </div>
+  <!-- Sección 2: Mensaje largo (centrado) -->
+  <div class="carta-section" id="carta-mensaje-section">
+    <div id="carta-mensaje" class="carta-mensaje"></div>
+  </div>
+  <!-- Sección 3: Vacío, por si quieres botón después -->
+  <div class="carta-section" id="carta-boton-section"></div>
+  <!-- El fondo grande (círculo pastel) -->
+  <div id="carta-bg" class="carta-bg"></div>
+</div>
 
 
 
@@ -50,7 +65,7 @@
       let Confetti = function () {
         var t = function () {
             return function () {
-                this.gravity = 10, this.particle_count = 105, this.particle_size = 1, this.explosion_power = 25, this.destroy_target = !0, this.fade = !1
+                this.gravity = 10, this.particle_count = 75, this.particle_size = 1, this.explosion_power = 25, this.destroy_target = !0, this.fade = !1
             }
         }(), e = function () {
             function e(n) {
@@ -168,45 +183,68 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 3) Tus variables principales
-    const { color, mensaje, remitente, intencion, imagen, video } = data.data;
+    const { color, mensaje, remitente, intencion, imagen, video, highlightBoxBg } = data.data;
 
     // 4) Paletas de color
     const colorMap = {
       red: '#e23535',
       orange: '#ff9c24',
       violet: '#6e16e3',
-      yellow: '#fddd00',
+      yellow: '#fdd300',
       blue: '#2d95ff',
-      white: '#dcdcdc',
+      white: '#ff0000',
       pink: '#ff58ac'
     };
-    const colorBgMap = {
-      red: "#ffdada",
-      orange: "#ffe3c1",
-      violet: "#e7e4ff",
-      yellow: "#fcf7d1",
-      blue: "#d3ebff",
-      white: "#e8e8e8",
-      pink: "#ffe5f2"
-    };
-    const colorHex = colorMap[color] || color || "#ff9c24";
-    const colorBgRosa = colorBgMap[color] || "#e1e1e1";
+
+   const hexToBg = {
+  "#e23535": "#ffdada",   // rojo
+  "#ff9c24": "#ffe3c1",   // naranja
+  "#6e16e3": "#cfcee7",   // violeta
+  "#fdd300": "#fef4a7",   // amarillo
+  "#2d95ff": "#d3ebff",   // azul/celeste, el pastel clarito del ejemplo
+  "#ff0000": "#dcdcdc",   // blanco
+  "#ff58ac": "#f0c9dc"    // rosa
+};
+ const colorToLetterImg = {
+  "#e23535": "3d/letter-red.png",
+  "#ff9c24": "3d/letter-orange.png",
+  "#6e16e3": "3d/letter-violet.png",
+  "#fdd300": "3d/letter-yellow.png",
+  "#2d95ff": "3d/letter-blue.png",         // o letter-lightblue.png, tú eliges
+  "#ff0000": "3d/letter-white.png",
+  "#ff58ac": "3d/letter-pink.png"
+};
+
+
+const colorHex = colorMap[color] || color || "#ff9c24";
+const colorBgRosa = hexToBg[colorHex] || "#e1e1e1";
+
+
+    
 
     // --- Pantalla de carga animada ---
     document.querySelector('#text-0-2').style.color = colorHex;
 
-    let o1 = 0, o2 = 0;
-    const txt1 = "Para";
-    const txt2 = remitente;
-    const speed = 150;
+  let o1 = 0, o2 = 0;
+const txt1 = "Para";
+const txt2 = remitente;
+const speed = 150;
+
+// Aplica estilos inline desde el JS
+const el1 = document.getElementById("text-0-1");
+const el2 = document.getElementById("text-0-2");
+el1.style.fontSize   = "2rem";
+el1.style.fontWeight = "700";
+el2.style.fontSize   = "2rem";
+el2.style.fontWeight = "700";
 
 function typeWriter() {
   if (o1 < txt1.length) {
-    document.getElementById("text-0-1").innerHTML += txt1.charAt(o1);
+    el1.innerHTML += txt1.charAt(o1);
     o1++;
     setTimeout(typeWriter, speed);
   } else if (o2 < txt2.length) {
-    document.getElementById("text-0-2").innerHTML += txt2.charAt(o2);
+    el2.innerHTML += txt2.charAt(o2);
     o2++;
     setTimeout(typeWriter, speed);
   } else {
@@ -224,11 +262,10 @@ function typeWriter() {
   }
 }
 
-    // Pausa antes de empezar a escribir
-    setTimeout(() => {
-      typeWriter();
-    }, 1000); // Espera 1 segundo antes de empezar la animación
-
+// Pausa antes de empezar a escribir
+setTimeout(() => {
+  typeWriter();
+}, 1000);
 
     // --- Animación de la rosa ---
     function mostrarRosaAnimada() {
@@ -280,10 +317,10 @@ function mostrarMensajeCortoHTML(nombre, intencion, colorHex) {
   mensajeCortoDiv.innerHTML = "";
 
   // Arma el mensaje con nombre en color, y el espacio no rompible
-  const mensajeHtml = `<span style="color:${colorHex}; font-weight:900">${nombre}</span>, ${intencion}`;
+  const mensajeHtml = `<span style="color:${colorHex}; font-weight:700">${nombre}</span>, ${intencion}`;
 
   let i = 0, actual = "", abriendoTag = false, tag = "";
-  const speed = 44;
+  const speed = 32;
 
   function escribir() {
     if (i < mensajeHtml.length) {
@@ -303,27 +340,110 @@ function mostrarMensajeCortoHTML(nombre, intencion, colorHex) {
       mensajeCortoDiv.innerHTML = actual;
       i++;
       setTimeout(escribir, speed);
-    } else {
+    } 
+    
+    else {
     setTimeout(() => {
-      const btn = document.getElementById("boton-abrir");
-      btn.style.display = "flex";
-      btn.style.background = colorHex;
+  const btn = document.getElementById("boton-abrir");
+  btn.style.display = "flex";
+  btn.style.background = colorHex;
 
-      // Solo aquí, cuando el botón YA existe:
-      if (!window.confetti) {
-        window.confetti = new Confetti('boton-abrir');
-        window.confetti.setCount(525);
-        window.confetti.setSize(2);
-        window.confetti.setPower(40);
-        window.confetti.setFade(false);
-        window.confetti.destroyTarget(false);
-      }
-    }, 350);
+  // Inicializa confetti SOLO si no existe ya
+  if (!window.confetti) {
+    window.confetti = new Confetti('boton-abrir');
+    window.confetti.setCount(125);
+    window.confetti.setSize(2);
+    window.confetti.setPower(40);
+    window.confetti.setFade(false);
+    window.confetti.destroyTarget(false);
+  }
+
+  // Aquí va tu código de animación de la rosa/fondo:
+  btn.onclick = () => {
+    // Confetti ya se lanza automáticamente por el listener de Confetti
+    // Selecciona la rosa y el fondo
+  const rosaImg = document.querySelector('.rosa-img');
+  const rosaBg = document.querySelector('.rosa-bg');
+
+  rosaImg.classList.add('rosa-popout');
+  rosaBg.classList.add('bg-popout');
+  
+    // Desaparece mensaje y botón
+  document.getElementById('mensaje-corto').classList.add('fadeout-gift');
+  btn.classList.add('fadeout-gift');
+
+  setTimeout(() => {
+    // 1. Desaparece el grid de la rosa, mensaje y botón
+    document.getElementById('gift-page').style.display = "none";
+    // 2. Muestra la sección de la carta
+    document.getElementById('carta-page').style.display = "grid";
+    document.getElementById('carta-page').style.opacity = "1";
+     //3. Ahora animas el fondo pastel de la carta con el color adecuado
+    // Fondo ya está grande, solo asegúrate de aplicar el color:
+  const cartaBg = document.getElementById('carta-bg');
+  cartaBg.style.background = colorBgRosa;  // ← Aquí usas el mismo color que en la rosa
+  cartaBg.classList.remove('carta-bg-visible'); // Por si acaso
+   // Aquí pegas esto 👇
+  const letterImgSrc = colorToLetterImg[colorHex] || "3d/letter-orange.png";
+  const imgCarta = document.getElementById("img-carta");
+  imgCarta.src = letterImgSrc;
+  imgCarta.classList.remove('visible'); // Reinicia la animación si fuera necesario
+
+   // 5. Pequeña pausa para el reflow y animaciones:
+  setTimeout(() => {
+    cartaBg.classList.add('carta-bg-visible');
+    imgCarta.classList.add('visible'); // ← AQUÍ el fade-in de la carta
+
+    // Llama aquí el mensaje largo:
+  mostrarCartaMensaje(colorHex, mensaje);
+
+  }, 70);
+
+
+
+}, 1000); // O el tiempo tras la animación de la rosa
+};
+}, 350);
 }
 
   }
   escribir();
 }
+
+
+function mostrarCartaMensaje(colorHex, mensajeLargo) {
+  const cartaMensajeDiv = document.getElementById("carta-mensaje");
+  cartaMensajeDiv.innerHTML = "";
+
+  // Solo el mensaje, todo en el color de la rosa
+  const textoHTML = `<span style="color:${colorHex}; font-weight:900">${mensajeLargo}</span>`;
+
+  let i = 0, actual = "", abriendoTag = false, tag = "";
+  const speed = 32;
+
+  function escribir() {
+    if (i < textoHTML.length) {
+      const char = textoHTML.charAt(i);
+
+      if (char === "<") abriendoTag = true;
+      if (abriendoTag) {
+        tag += char;
+        if (char === ">") {
+          abriendoTag = false;
+          actual += tag;
+          tag = "";
+        }
+      } else {
+        actual += char;
+      }
+      cartaMensajeDiv.innerHTML = actual;
+      i++;
+      setTimeout(escribir, speed);
+    }
+  }
+  escribir();
+}
+
 
 
 
