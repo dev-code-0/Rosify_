@@ -74,7 +74,7 @@ app.get('/api/rosas/:code', async (req, res) => {
   }
 });
 
-// ─── 5) Catch-all con un middleware en lugar de ruta inválida ─────────
+// ─── 5) Catch-all con un middleware en lugar de ruta inválida ─────────192.168.100.80
 //     Este bloque “agarra” cualquier petición que NO haya sido /api/rosas ni
 //     un archivo estático, y devuelve index.html para que el frontend lo procese.
 app.use((req, res) => {
@@ -82,6 +82,6 @@ app.use((req, res) => {
 });
 
 // ─── 6) Levantar el servidor ───────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT,  () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
