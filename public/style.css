@@ -1,4 +1,6 @@
 
+
+
 body {
   background: #fafafa;
   margin: 0;
@@ -27,6 +29,8 @@ body {
 #rosa-animada {
   justify-self: center;
   align-self: end;
+  flex-direction: column; 
+  
 }
 .gift-page {
   display: grid;
@@ -38,17 +42,19 @@ body {
   background: transparent;
   position: relative;
   box-sizing: border-box;
+  /* Si quieres que esté siempre visible, 
+  cambia 'display: none' por 'display: grid' en el HTML o JS */
 }
 
 .gift-section {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 #gift-rosa {
   /* Para forzar la rosa al centro superior */
-  align-items: center;
+  align-items: start;
   justify-content: flex-end;
 }
 #gift-mensaje {
@@ -71,10 +77,14 @@ body {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  opacity: 1; /* <- SIEMPRE visible el bloque contenedor */
-  transform: translate(-50%, -50%);
+  opacity: 1;
+  /*<-SIEMPREvisibleelbloquecontenedor*/transform: translate(-50%, -50%);
   z-index: 10;
   transition: opacity 0.9s, top 1.8s cubic-bezier(.33,1.34,.58,1), transform 1.8s cubic-bezier(.33,1.34,.58,1);
+  -webkit-transition: opacity 0.9s, top 1.8s cubic-bezier(.33,1.34,.58,1), transform 1.8s cubic-bezier(.33,1.34,.58,1);
+  -moz-transition: opacity 0.9s, top 1.8s cubic-bezier(.33,1.34,.58,1), transform 1.8s cubic-bezier(.33,1.34,.58,1);
+  -ms-transition: opacity 0.9s, top 1.8s cubic-bezier(.33,1.34,.58,1), transform 1.8s cubic-bezier(.33,1.34,.58,1);
+  -o-transition: opacity 0.9s, top 1.8s cubic-bezier(.33,1.34,.58,1), transform 1.8s cubic-bezier(.33,1.34,.58,1);
 }
 .rosa-bg {
   position: absolute;
@@ -125,7 +135,7 @@ body {
 }
 
 .rosa-animada.final {
-  top: 48px;
+  top: 1px;
   transform: translate(-50%, 0);
   height: 350px;
 }
@@ -273,10 +283,19 @@ body {
   position: relative;
   background: transparent;
   box-sizing: border-box;
-  opacity: 1;
-  transition: opacity 0.6s;
+  transition: background 0.6s, opacity 1s cubic-bezier(.33,1.34,.58,1); /* Agrega esto */
+  opacity: 0;  /* <-- Empieza oculto */
   z-index: 1;
+  
+  
 }
+.carta-page.carta-page-visible {
+  opacity: 1;  /* <-- Al agregar la clase, aparece */
+}
+#carta-page{
+overflow: hidden !important;
+}
+
 .carta-section {
   display: flex;
   flex-direction: column;
@@ -286,9 +305,9 @@ body {
 }
 #carta-img-section {
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;   /* Cambia de flex-end a flex-start */
+  height: 100%;                  /* Asegura que ocupe toda la altura de la fila del grid */
 }
-
 #carta-mensaje-section {
   align-items: center;
   justify-content: center;
@@ -320,7 +339,7 @@ body {
   transform: scale(1);
 }
 
-/* Fondo pastel animado, igual que antes */
+/* 
 .carta-bg {
   position: absolute;
   left: 50%;
@@ -328,24 +347,24 @@ body {
   width: 800px;
   height: 800px;
   border-radius: 50%;
-  background: #f0c9dc; /* O el color que toque según la rosa */
+  background: #f0c9dc;
   z-index: 0;
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1.5);
+  
   transition: opacity 1.2s cubic-bezier(.33,1.34,.58,1);
 }
 .carta-bg.carta-bg-visible {
   opacity: 1;
-}
+}*/
 
 
-/* Animación cuando aparece la carta */
+/* Animación cuando aparece la carta 
 .carta-bg.carta-bg-popout {
   width: 800px !important;
   height: 800px !important;
   transform: translate(-50%, -50%) scale(2.2);
   opacity: 1 !important;
-}
+}*/
 
 
 .carta-mensaje {
@@ -367,11 +386,39 @@ body {
   /* El color se pone en línea con el JS */
 }
 
-@media (max-width: 400px) {
-  .boton-abrir { width: 90%; }
-  .gift-page { grid-template-rows: 25vh 1fr 15vh; }
-  /* Ajusta tamaños de letra, márgenes, etc. */
+@media (max-width: 480px) {
+  .rosa-bg
+
+ /*carta-bg */
+  
+  {
+    height: 98vw;
+    max-width: 98vw;
+    max-height: 98vw;
+    min-width: 160px;
+    min-height: 160px;
+  }
+  .rosa-img,
+  .carta-img {
+    max-width: 190px;
+  }
+  .rosa-animada.final .rosa-bg {
+  width: 200px;
+  height: 200px;}
+  .rosa-animada.final .rosa-img {
+  width: 200px;
+  height: 200px;}
+  .gift-page {
+    /* Fila 1: Rosa más pequeña, botón más grande */
+    grid-template-rows: minmax(28vh, 150px) 1fr minmax(20vh, 100px);
+  }
 }
-@media (min-width: 768px) {
-  #contenedor { max-width: 600px; }
+/* Para navegadores Webkit (Chrome, Safari, Edge) */
+body::-webkit-scrollbar, html::-webkit-scrollbar {
+  width: 0px !important;
+  background: transparent !important;
+}
+/* También asegúrate de no tener overflow-x/y en visible accidentalmente */
+body, html {
+  overflow-x: hidden;
 }

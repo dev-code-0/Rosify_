@@ -14,16 +14,16 @@
   <div id="contenedor">
   <div class="loading">
     <div class="p-24">
-      <h1 class="h1-rosify">
+      <h1 class="h1-rosify" style="font-size: 30px; font-weight: 600; text-align: center; color: #000;">
         <span id="text-0-1"></span>
         <span id="text-0-2" class="color-rose"></span>
       </h1>
     </div>
   </div>
 
-<div id="gift-page" class="gift-page">
+<div id="gift-page" class="gift-page" style="display:none;">
   <div class="gift-section" id="gift-rosa">
-    <div id="rosa-animada" class="rosa-animada">
+    <div id="rosa-animada" class="rosa-animada" style="display: none;">
       <div id="rosa-bg" class="rosa-bg bg-desaparecer"></div>
       <img id="img-rosa" src="" alt="Rosa" class="rosa-img" />
     </div>
@@ -32,7 +32,7 @@
     <div id="mensaje-corto" class="mensaje-corto"></div>
   </div>
   <div class="gift-section" id="gift-boton">
-    <div id="boton-abrir" class="boton-abrir">
+    <div id="boton-abrir" class="boton-abrir" style="display: none;">
       Abrir mensaje
     </div>
   </div>
@@ -88,9 +88,29 @@
                 }, this.setupCanvasContext = function () {
                     if (!e.CTX) {
                         var t = document.createElement("canvas");
-                        e.CTX = t.getContext("2d"), t.width = 2 * window.innerWidth, t.height = 2 * window.innerHeight, t.style.position = "fixed", t.style.top = "0", t.style.left = "0", t.style.width = "calc(100%)", t.style.height = "calc(100%)", t.style.margin = "0", t.style.padding = "0", t.style.zIndex = "999999999", t.style.pointerEvents = "none", document.body.appendChild(t), window.addEventListener("resize", function () {
-                            t.width = 2 * window.innerWidth, t.height = 2 * window.innerHeight
-                        })
+e.CTX = t.getContext("2d");
+t.width = 2 * window.innerWidth;
+t.height = 2 * window.innerHeight;
+t.style.position = "fixed";
+t.style.top = "0";
+t.style.left = "0";
+// CAMBIO AQUÍ
+t.style.width = "100vw";
+t.style.height = "100vh";
+t.style.margin = "0";
+t.style.padding = "0";
+t.style.zIndex = "999999999";
+t.style.pointerEvents = "none";
+// Añade por si acaso:
+t.style.overflow = "hidden";
+t.style.maxWidth = "100vw";
+t.style.maxHeight = "100vh";
+document.body.appendChild(t);
+window.addEventListener("resize", function () {
+    t.width = 2 * window.innerWidth;
+    t.height = 2 * window.innerHeight;
+});
+
                     }
                 }, this.setupElement = function (t) {
                     var n;
@@ -257,6 +277,10 @@ function typeWriter() {
         document.querySelector('.loading').style.display = "none";
         document.getElementById('gift-page').style.display = "grid";
         mostrarRosaAnimada();
+        setOverflowHiddenAll(false); // Permite scroll/overflow para animación del círculo grande
+
+
+        
       }, 900); // Espera a que termine la transición (0.9s)
     }, 500); // Pausa breve antes de empezar a desvanecer
   }
@@ -315,6 +339,7 @@ setTimeout(() => {
 function mostrarMensajeCortoHTML(nombre, intencion, colorHex) {
   const mensajeCortoDiv = document.getElementById("mensaje-corto");
   mensajeCortoDiv.innerHTML = "";
+  
 
   // Arma el mensaje con nombre en color, y el espacio no rompible
   const mensajeHtml = `<span style="color:${colorHex}; font-weight:700">${nombre}</span>, ${intencion}`;
@@ -351,7 +376,7 @@ function mostrarMensajeCortoHTML(nombre, intencion, colorHex) {
   // Inicializa confetti SOLO si no existe ya
   if (!window.confetti) {
     window.confetti = new Confetti('boton-abrir');
-    window.confetti.setCount(125);
+    window.confetti.setCount(225);
     window.confetti.setSize(2);
     window.confetti.setPower(40);
     window.confetti.setFade(false);
@@ -375,9 +400,19 @@ function mostrarMensajeCortoHTML(nombre, intencion, colorHex) {
   setTimeout(() => {
     // 1. Desaparece el grid de la rosa, mensaje y botón
     document.getElementById('gift-page').style.display = "none";
+    const cartaPage = document.getElementById('carta-page');
+cartaPage.style.display = "grid";
+cartaPage.style.background = colorBgRosa;
+void cartaPage.offsetWidth; // Fuerza reflow para asegurar animación
+cartaPage.classList.add('carta-page-visible');
+
     // 2. Muestra la sección de la carta
     document.getElementById('carta-page').style.display = "grid";
     document.getElementById('carta-page').style.opacity = "1";
+
+    // Cambia el fondo general del contenedor de la carta
+document.getElementById('carta-page').style.background = colorBgRosa;
+
      //3. Ahora animas el fondo pastel de la carta con el color adecuado
     // Fondo ya está grande, solo asegúrate de aplicar el color:
   const cartaBg = document.getElementById('carta-bg');
@@ -454,7 +489,15 @@ function mostrarCartaMensaje(colorHex, mensajeLargo) {
   }
 
 
-
+function setOverflowHiddenAll(enabled) {
+  // Aplica o quita overflow:hidden en los principales contenedores
+  document.body.style.overflow = enabled ? 'hidden' : '';
+  var ids = ['contenedor', 'gift-page', 'carta-page'];
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.overflow = enabled ? 'hidden' : '';
+  });
+}
 
 
   
