@@ -36,9 +36,9 @@
 }
 
 .preview-text {
-    font-size: 20px;
-    font-weight: 600;
-    font-weight: bold;
+    /* font-size: 20px; */
+    font-weight: 900;
+    /* font-weight: bold; */
     line-height: 24px;
     height: 120px;
     opacity: 0;
@@ -62,7 +62,7 @@
 .si-14,
 .si-15,
 .si-x {
-    font-weight: 500;
+    font-weight: 990;
     opacity: 0.6;
     display: none;
 }
@@ -142,4 +142,16 @@
 .selected-intention {
     border: 2px solid #ff3333; /* Cambia #FF5733 al color que prefieras */
 }
+.elige-intencion{
+    font-size: 30px;
+}
 
+@media (max-width: 600px) {
+ 
+  .p-24{
+    padding: 15px;
+  }
+  .elige-intencion{
+    font-size: 20px;
+  }
+}

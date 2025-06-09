@@ -599,31 +599,6 @@ inputName.addEventListener('input', function () {
     namePlaceholder.textContent = enteredName; // Actualizar el nombre en la vista previa
 });
 
-
-
-// ========================
-// Lectura y verificación de valores de localStorage
-// ========================
-// const storedName = localStorage.getItem("selectedName");
-// const storedIntention = localStorage.getItem("selectedIntention");
-// const storedRoseSrc = localStorage.getItem("selectedRoseSrc");
-// const storedRoseColor = localStorage.getItem("selectedRoseColor");
-// const storedVideo = localStorage.getItem("videoLink");
-// const mensajeGuardado = localStorage.getItem("mensajeAdicional");
-// const storedBouquetOption = localStorage.getItem("selectedBouquetOption"); // Guarda si el usuario eligió el ramo
-
-// // Mostrar en consola los valores guardados
-// if (storedName) console.log("Nombre guardado:", storedName);
-// if (storedIntention) console.log("Intención guardada:", storedIntention);
-// if (storedRoseSrc) console.log("URL de la rosa guardada:", storedRoseSrc);
-// if (storedRoseColor) console.log("Color de la rosa guardado:", storedRoseColor);
-// if (storedVideo) console.log("Enlace de video guardado:", storedVideo);
-// if (mensajeGuardado) console.log("Mensaje adicional guardado:", mensajeGuardado);
-// if (storedBouquetOption) console.log("Opción de ramo guardada:", storedBouquetOption);
-
-
-
-
 // Agregar eventos de clic a cada intención con su id correspondiente
 document.getElementById("intention1").addEventListener("click", () => ChangeIntention(0, "intention1"));
 document.getElementById("intention3").addEventListener("click", () => ChangeIntention(2, "intention3"));
@@ -640,10 +615,6 @@ document.getElementById("intention9").addEventListener("click", () => ChangeInte
 document.getElementById("intention14").addEventListener("click", () => ChangeIntention(13, "intention14"));
 document.getElementById("intention15").addEventListener("click", () => ChangeIntention(14, "intention15"));
 document.getElementById("intention16").addEventListener("click", () => ChangeIntention(15, "intention16"));
-
-
-
-
 
 //Tercera pestaña:
 async function pegarLink() {
@@ -1026,20 +997,44 @@ document.getElementById("finishBtn").addEventListener("click", function () {
 
 
 // Copiar al portapapeles: seleccionamos el texto del <a> indirectamente
-document.getElementById("btnCopiar").addEventListener("click", () => {
-  const linkRosa = document.getElementById("linkRosa");
-  // Creamos un elemento temporal para seleccionar el texto
-  const sel = window.getSelection();
-  const range = document.createRange();
-  range.selectNodeContents(linkRosa);
-  sel.removeAllRanges();
-  sel.addRange(range);
-  document.execCommand("copy");
-  sel.removeAllRanges();
+document.getElementById("btnCopiar").addEventListener("click", async () => {
+  const linkRosa = document.getElementById("linkRosa").href;
 
-  const btn = document.getElementById("btnCopiar");
-  btn.textContent = "Copiado ✔";
-  setTimeout(() => btn.textContent = "Copiar enlace", 2000);
+  // 1) Intentamos la API moderna
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(linkRosa);
+      copiarFeedback();
+      return;
+    } catch (err) {
+      console.warn("Clipboard API falló, usando fallback:", err);
+    }
+  }
+
+  // 2) Fallback: textarea oculto
+  const textarea = document.createElement("textarea");
+  textarea.value = linkRosa;
+  // Posiciónalo fuera de pantalla para que no se vea
+  textarea.style.position = "fixed";
+  textarea.style.top = "-9999px";
+  document.body.appendChild(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+  try {
+    document.execCommand("copy");
+    copiarFeedback();
+  } catch (err) {
+    console.error("execCommand fallback falló:", err);
+    alert("No se pudo copiar automáticamente. Selecciona y copia manualmente:\n" + linkRosa);
+  }
+  document.body.removeChild(textarea);
+
+  function copiarFeedback() {
+    const btn = document.getElementById("btnCopiar");
+    btn.textContent = "Copiado ✔";
+    setTimeout(() => btn.textContent = "Copiar enlace", 2000);
+  }
 });
+
 
 
